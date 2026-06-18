@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de Impressões - Escola</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>Controle de Impressões</h2>
+
+        <datalist id="listaProfessores"></datalist>
+
+        <div class="filter-group">
+            <label>Consultar relatórios por período e professor:</label>
+            <div class="filter-controls">
+                <input type="date" id="dataInicio" onchange="atualizarTela()" title="Data Inicial">
+                <span class="separador-data">até</span>
+                <input type="date" id="dataFim" onchange="atualizarTela()" title="Data Final">
+
+                <input type="text" id="usuarioFiltro" list="listaProfessores" placeholder="Buscar professor..."
+                    oninput="atualizarTela()" title="Filtrar por professor/setor">
+
+                <button onclick="limparFiltros()" class="btn-secundario">Limpar</button>
+            </div>
+        </div>
+
+        <div class="dashboard">
+            <div class="card">
+                <h3 id="tituloDia">Total Hoje</h3>
+                <p id="totalDia">0</p>
+            </div>
+            <div class="card">
+                <h3 id="tituloMes">Total no Mês</h3>
+                <p id="totalMes">0</p>
+            </div>
+        </div>
+
+        <div id="alertaCota" class="info-cota">
+            Cota restante de <span id="nomeCotaTexto"></span> neste mês: <span id="valorCotaTexto">0</span> folhas.
+        </div>
+
+        <div class="form-group form-lancamento">
+            <input type="date" id="dataLancamento" title="Data do lançamento (Deixe vazio para Hoje)">
+
+            <input type="text" id="nomeUsuario" list="listaProfessores" placeholder="Quem imprimiu? (Busque aqui)"
+                oninput="verificarCota()">
+
+            <input type="number" id="qtdImpressoes" placeholder="Qtd">
+            <button onclick="registrarImpressao()">Lançar</button>
+        </div>
+
+        <div class="history">
+            <div class="history-header">
+                <h3 id="tituloHistorico">Lançamentos de Hoje</h3>
+                <div>
+                    <button onclick="exportarCSV()"
+                        style="background-color: #28a745; border-color: #28a745; margin-right: 10px; color: white; padding: 6px 12px; border-radius: 4px; font-size: 12px; font-weight: bold; cursor: pointer;">📊
+                        Baixar Excel</button>
+                    <button onclick="apagarTudo()" class="btn-perigo" title="Apagar todos os registros">⚠️ Apagar
+                        Tudo</button>
+                </div>
+            </div>
+            <div id="listaRegistros">
+                <p class="no-records">Carregando dados da nuvem...</p>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 25px; border-top: 1px solid #dee2e6; padding-top: 15px;">
+            <a href="#" onclick="event.preventDefault(); abrirModal();" class="link-gerenciar">⚙️ Gerenciar Usuários e
+                Cotas</a>
+        </div>
+    </div>
+    <div id="modalGerenciar" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="fecharModal()" title="Fechar">&times;</span>
+
+            <div class="management" style="margin-top: 0; padding-top: 0; border: none;">
+                <h3 style="margin-top: 0;">⚙️ Gerenciar Usuários e Cotas</h3>
+                <p style="font-size: 13px; color: #666; margin-bottom: 15px;">Cadastre novos usuários ou digite um nome
+                    existente para atualizar o limite de cópias.</p>
+
+                <div class="form-group form-lancamento">
+                    <input type="text" id="novoProfNome" placeholder="Nome (Ex: Prof. Silva, Coordenação)">
+                    <input type="number" id="novoProfCota" placeholder="Cota (Ex: 1000)" style="flex: 0.5;">
+                    <button onclick="adicionarProfessor()" style="background-color: #17a2b8;">Salvar</button>
+                </div>
+
+                <div id="listaGerenciamentoProfessores">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="script.js"></script>
+</body>
+
+</html>
